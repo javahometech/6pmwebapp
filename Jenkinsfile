@@ -5,8 +5,10 @@ pipeline{
     }
     stages{
         stage('SCM Checkout'){
-            git branch: "${params['branchName']}",
-                url: 'https://github.com/javahometech/6pmwebapp'
+            steps{
+                git branch: "${params['branchName']}",
+                    url: 'https://github.com/javahometech/6pmwebapp'
+            }
         }
     }
 }
