@@ -18,7 +18,9 @@ pipeline{
         }
 
         stage('Deploy - Dev'){
-            
+            steps{
+                echo "deploy to dev server"
+            }
         }
     }
 }
