@@ -1,13 +1,19 @@
 pipeline{
     agent any
-    parameters {
-        string defaultValue: 'master', description: 'Choose the branch to build and deploy', name: 'branchName', trim: false
-    }
+    environment{
+	  PATH = "${PATH}:${tool name: 'maven3', type: 'maven'}/bin"
+	}
     stages{
-        stage('SCM Checkout'){
+
+        stage('Maven Build'){
             steps{
-                git branch: "${params['branchName']}",
-                    url: 'https://github.com/javahometech/6pmwebapp'
+                sh "mvn clean package"
+            }
+        }
+
+        stage('Deploy - Dev'){
+            steps{
+                echo "deploy to dev server"
             }
         }
     }
