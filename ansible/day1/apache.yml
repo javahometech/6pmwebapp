@@ -1,0 +1,31 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Install Apache server
+      yum:
+        name: httpd
+        state: present
+    - name: Copy index.html
+      copy:
+        src: index.html
+        dest: /var/www/html
+    - name: start apache
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+    - name: change port number
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^Listen '
+        insertafter: '^#Listen '
+        line: Listen 9090
+      notify:
+        - restart apache
+  handlers:
+    - name: restart apache
+      service:
+        name: httpd
+        state: restarted
+
