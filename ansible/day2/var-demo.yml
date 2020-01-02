@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    git_url: "https://github.com/javahometech/myweb"
+  tasks:
+    - name: Install git
+      yum:
+        name: git
+        state: present
+    - name: clone git repo
+      git:
+        repo: "{{git_url}}"
+        dest: /tmp/hari

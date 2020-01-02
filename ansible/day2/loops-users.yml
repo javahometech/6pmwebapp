@@ -1,0 +1,17 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: create javahome group
+      group:
+        name: javahome
+        state: present
+
+    - name: Install packages
+      user:
+        name: "{{item.name}}"
+        groups: "{{item.group}}"
+      loop:
+        - { name: 'hari', group: 'javahome' }
+        - { name: 'rahul', group: 'ec2-user' }
+        - { name: 'ramesh', group: 'javahome' }

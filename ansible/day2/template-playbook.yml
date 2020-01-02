@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  tasks:
+    - name: jinja2 demo
+      template:
+        src: myfile.j2
+        dest: myfile.txt
