@@ -1,0 +1,35 @@
+---
+- hosts: 172.31.40.36
+  become: yes
+  vars:
+    - docker_version: v1
+  tasks:
+    - name: Install pip
+      yum:
+        name: python-pip
+        state: present
+    - name: Install docker-py
+      pip:
+        name: docker-py
+        state: present
+    - name: Install docker daemon
+      yum:
+        name: docker
+        state: present
+    - name: Start and enable docker daemon
+      service:
+        name: docker
+        state: started
+        enabled: yes
+    - name: create docker container
+      docker_container:
+        name: nodeapp
+        image: kammana/nodeapp:{{docker_version}}
+        published_ports:
+          - "8080:8080"
+    - name: Remove unused objects
+      debug:
+        msg: "Hi"
+    - name: delete images
+      docker_prune:
+        images: yes
