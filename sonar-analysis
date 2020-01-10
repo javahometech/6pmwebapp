@@ -1,0 +1,40 @@
+
+pipeline{
+    
+    agent any
+	
+	environment{
+	  PATH = "${PATH}:${tool name: 'maven3', type: 'maven'}/bin"
+	}
+    
+    stages{
+        stage('SCM Checkout'){
+            steps{
+                git url: 'https://github.com/javahometech/6pmwebapp'
+            }
+            
+        }
+        
+        stage('Sonar Analysis'){
+            steps{
+               withSonarQubeEnv('sonar8') { 
+				  sh "mvn sonar:sonar"
+			   }
+            }
+        }
+		
+		stage('Check Sonar Status'){
+            steps{
+              timeout(time: 1, unit: 'HOURS') {
+              script{
+				  def qg = waitForQualityGate()
+				  if (qg.status != 'OK') {
+					  error "Pipeline failed due to quality gate failure: ${qg.status}"
+				  }
+			  }
+             }
+            }
+        }
+        
+    }
+}
